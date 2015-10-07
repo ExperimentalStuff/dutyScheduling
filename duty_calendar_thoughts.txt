@@ -1,0 +1,46 @@
+duty calendar tool 
+
+flow:
+
+models
+
+month:	has_many days
+day:	has_many appointments
+	has_many users via appoints
+user:	has_many appointments
+appointments:	belongs_to day
+		belongs_to user
+
+user functions:
+	login
+	create appointment
+	destroy appointment   
+
+program functions:
+	preset duty points for each user
+	preset duty restrictions: no QD duty, no QOD duty, QOD maxima tolerance
+	generate random duty graph
+	
+
+admin functions:
+	lockup changes
+	set deadline
+	run algorithm to arrange duty note
+	preset duty points for user
+
+algorithm considerations:
+	maximize days between each shift by same person
+
+	generate a version of shift list and push into array
+	sort array according to some weighting mechanism
+
+
+
+1 2 9 10 => 1+7+1 => 1+49+1
+1 3 8 10 => 2+5+2 => 4+25+4
+1 4 7 10 => 3+3+3 =>9+9+9
+
+
+遞迴方式：
+1. 依序呼叫Duty object,從班數多的先排起 （？）
+2. 第一個Duty object的結果valid -> 利用object的Duty.residual_available作為下一個duty object的參數，另外取得第二個人的appointment和duty_days製作下一個duty_object,如果做出來的invalid就停止呼叫下一個
